@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class Run : MonoBehaviour
 {
-    public Slider slider;
-
-    public float moveSpeed = 10f;
+    public float moveSpeed = 1f;
 
     private int State;//角色状态
 
@@ -24,17 +22,16 @@ public class Run : MonoBehaviour
     public List<Transform> prefebFloor;
     public List<Transform> floors;
 
-
     // Start is called before the first frame update
     void Start()
     {
-        speed();
-    } 
+        
+    }
     // Update is called once per frame
     void Update()
     {
-       // accelerate = -0.5f * moveSpeed;
-        
+        accelerate = -0.5f * moveSpeed;
+
         if (Input.GetAxis("Vertical") > 0)
 
         {
@@ -42,24 +39,21 @@ public class Run : MonoBehaviour
 
             CreatDestroyFloor(UP);
 
-           // ms = moveSpeed;
+            // ms = moveSpeed;
 
         }
 
-        else 
+        else
 
         {
-            
+
             setState(DOWN);
 
-           // CreatDestroyFloor(DOWN);
+            // CreatDestroyFloor(DOWN);
         }
 
     }
-    public void speed()
-    {
-        moveSpeed = slider.value;
-    }
+  
     void setState(int currState)
 
     {
@@ -80,21 +74,21 @@ public class Run : MonoBehaviour
 
                 break;
 
-            //case 1://向后移动
-                   
-            //        ms = ms + accelerate * Time.deltaTime;
+                //case 1://向后移动
 
-            //        if (ms <= 0)
-            //    {
-            //        ms = 0;
+                //        ms = ms + accelerate * Time.deltaTime;
 
-            //    }
-            //        else
-            //    {
-            //        ms = ms;
-            //    }
-            //    transformValue = Vector3.forward * Time.deltaTime * ms;
-            //    break;
+                //        if (ms <= 0)
+                //    {
+                //        ms = 0;
+
+                //    }
+                //        else
+                //    {
+                //        ms = ms;
+                //    }
+                //    transformValue = Vector3.forward * Time.deltaTime * ms;
+                //    break;
 
         }
 
@@ -116,48 +110,51 @@ public class Run : MonoBehaviour
 
         switch (currState)
         {
-            case 0://向前生成地面
+            case 1://向前生成地面
 
                 lastFloor = floors[floors.Count - 1];
                 firstFloor = floors[0];
-                GameObject F = GameObject.Find("Floor1");
-            if (lastFloor.position.z < transform.position.z + 10)
+                GameObject F = GameObject.Find("Bike");
+                if (lastFloor.position.z < transform.position.z + 1)
                 {
                     Transform prefeb = prefebFloor[Random.Range(0, prefebFloor.Count)];
                     Transform newFloor = Instantiate(prefeb, null);
-                    newFloor.position = (lastFloor.position + new Vector3(0, 0, 20));
+                    newFloor.position = (lastFloor.position);
                     newFloor.parent = F.transform;
                     floors.Add(newFloor);
                 }
 
-                if (firstFloor.position.z < transform.position.z - 15)
+                if (firstFloor.position.z < transform.position.z - 1)
                 {
                     floors.RemoveAt(0);
                     Destroy(firstFloor.gameObject);
                 }
                 break;
 
-            //case 1://向后生成地面
-            //    lastFloor = floors[0];
-            //    firstFloor = floors[floors.Count - 1];
-            //    if (firstFloor.position.z > transform.position.z - 15)
-            //    {
-            //        Transform prefeb = prefebFloor[Random.Range(0, prefebFloor.Count)];
-            //        Transform newFloor = Instantiate(prefeb, null);
-            //        newFloor.position = (firstFloor.position + new Vector3(0, 0, -20));
-            //        floors.Add(newFloor);
-            //    }
-            //    if (lastFloor.position.z > transform.position.z + 15)
-            //    {
-            //        floors.RemoveAt(0);
-            //        Destroy(lastFloor.gameObject);
-            //    }
-            //    break;
+            case 0://向后生成地面
+                lastFloor = floors[0];
+                firstFloor = floors[floors.Count - 1];
+                GameObject A = GameObject.Find("Bike");
+                if (firstFloor.position.z > transform.position.z - 0.1f)
+                {
+                    Transform prefeb = prefebFloor[Random.Range(0, prefebFloor.Count)];
+                    Transform newFloor = Instantiate(prefeb, null);
+                    newFloor.position = (firstFloor.position + new Vector3(0, 0, 0.1f));
+                    newFloor.parent = A.transform;
+                    floors.Add(newFloor);
+                }
+                if (lastFloor.position.z > transform.position.z + 0.1f)
+                {
+                    floors.RemoveAt(0);
+                    Destroy(lastFloor.gameObject);
+                }
+                break;
         }
 
     }
-
 }
+
+
 
 
 
